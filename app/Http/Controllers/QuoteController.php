@@ -2,34 +2,33 @@
 
 namespace App\Http\Controllers;
 
-use App\Author;
 use App\Quote;
-use App\AuthorLog;						//Adding our AuthorLog Model
 use Illuminate\Http\Request;			//using Request Facade for POST Method i.e. via form
 
 use App\Events\QuoteCreated;			//using our event newly created
+
 use Illuminate\Support\Facades\Event;   //for using Event Facade ( See Line 65 below ) 
 
 
 
 class QuoteController extends Controller {
 
-	public function getIndex($author = null) {		//parameter added as optional parameter passed in routes for filter purpose
-
-		if(!is_null($author)) {		//if we received name through parameter
-			$quote_author = Author::where('name', $author)->first();	//checking if that name exists or not
-
+	public function getIndex() {	
+		that name exists or not
+		$quote = 
 			if($quote_author) {
 				// $quotes = $quote_author->quotes()->orderBy('created_at', 'desc')->get();
 
 				$quotes = $quote_author->quotes()->orderBy('created_at', 'desc')->paginate(6);
 			}						//if exists fetch that author's quote in descending order
 		}
+		/*
 		else {
 			//$quotes = Quote::orderBy('created_at', 'desc')->get();
 
 			$quotes = Quote::orderBy('created_at', 'desc')->paginate(6);
 		}
+		*/
 
 
 
@@ -39,8 +38,8 @@ class QuoteController extends Controller {
 		return view('index', ['quotes' => $quotes]);
 	}
 
-	public function postQuote(Request $request) {
-
+	public function addQuote(Request $request) {
+		DB::raw("INSERT INTO ")
 		$this->validate($request, [
 			//'author' => 'required | max:60 | alpha ',	//validation for author input text
 
