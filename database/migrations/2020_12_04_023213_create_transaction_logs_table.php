@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateQuotesTable extends Migration
+class CreateTransactionLogsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -12,11 +12,11 @@ class CreateQuotesTable extends Migration
      */
     public function up()
     {
-        Schema::create('quotes', function (Blueprint $table) {
+        Schema::create('transaction_logs', function (Blueprint $table) {
             $table->increments('id');
-            $table->text('quote');
+			$table->string('ip_address',42);
+            $table->enum('add_quote', 'remove_quote');
             $table->timestamps();
-			
         });
     }
 
@@ -27,6 +27,6 @@ class CreateQuotesTable extends Migration
      */
     public function down()
     {
-        Schema::drop('quotes');
+        Schema::drop('transaction_logs');
     }
 }

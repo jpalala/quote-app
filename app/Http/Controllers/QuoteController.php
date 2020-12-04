@@ -38,8 +38,20 @@ class QuoteController extends Controller {
 		return view('index', ['quotes' => $quotes]);
 	}
 
+	publicfunction transact_quote($action = 'add_quote',$ip) {
+		$ip = ip2long($ip);
+		if($action == 'add_quote') {
+			
+			DB::raw("INSERT INTO transaction_logs(action, ip) VALUES('add_quote','$ip')");
+		
+		}
+		
+	}
+	
 	public function addQuote(Request $request) {
-		DB::raw("INSERT INTO ")
+		
+		
+		
 		$this->validate($request, [
 			//'author' => 'required | max:60 | alpha ',	//validation for author input text
 
@@ -47,32 +59,11 @@ class QuoteController extends Controller {
 			'quote' => 'required | max:500',			//validation for quote input text
 
 			'email' => 'required | email'
-		]);								//for showing validation done in index.blade.php line12
+		]);								//for showing validation done in 
+		DB::raw("INSERT INTO quotes(id, quote) VALUES(NULL, $quote)"))
 
-		$authorText = ucfirst($request['author']);    //to make first letter Upper Case
-		$quoteText = $request['quote'];
-
-		$email = $request['email'];                   //receiving email
-
-		$author = Author::where('name', $authorText)->first();		//Author Model Eloquent Method, checking whether author name exists or not
-
-		if(!$author) {
-			$author = new Author();			//if author object not created creating one
-			$author->name = $authorText;//saving name text in name column received by form
-			$author->email = $email; 	//saving name text in email column received by form
-			$author->save();				//saving by Laravel save function
-		} 
-
-		$quote = new Quote();				//creating quote object as author is created
-		$quote->quote = $quoteText;			//saving quot text in name column received by form
-		$author->quotes()->save($quote);          //instead of save function as quote is dependent on author passing to Model function method (See Author.php method)
-
-
-		Event::fire(new QuoteCreated($author)); //QuoteCreated is the event created in apps/Event/QuoteCreated
-				// Firing the Quotes created Event
-				//receiving the $author property from QuoteCreated Event
-				//From received property we will be accessing name i.e. $author->name see line 20 QuoteCreated.php event created
-
+		Event::fire(new QuoteCreated($author)); 
+		
 		return redirect()->route('index')->with([
 			'success' => 'Quote saved!'
 		]);
